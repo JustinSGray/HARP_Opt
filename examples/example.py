@@ -19,7 +19,7 @@ from harpopt import HARPOptCCBlade
 varspeed = True
 varpitch = True
 cdf_type = 'rayleigh'
-optimizer = 'psqp'
+optimizer = 'conmin'
 # ------------------------
 
 # ---- instantiate rotor object -------
@@ -85,7 +85,7 @@ if cdf_type == 'weibull':
 
 # ---- control settings ------------
 rotor.control.Vin = 3.0  # (Float, m/s): cut-in wind speed
-rotor.control.Vout = 25.0  # (Float, m/s): cut-out wind speed
+rotor.control.Vout = 50.0  # (Float, m/s): cut-out wind speed
 rotor.control.ratedPower = 5e6  # (Float, W): rated power
 rotor.control.pitch = 0.0  # (Float, deg): pitch angle in region 2 (and region 3 for fixed pitch machines)
 
@@ -114,6 +114,10 @@ rotor.AEP_loss_factor = 1.0  # (Float): availability and other losses (soiling, 
 
 
 # run one iteration to get baseline for normalization
+rotor.driver.config_parameters()
+rotor.driver.update_parameters()
+rotor.driver.start_iteration()
+
 rotor.driver.run_iteration()
 rotor.AEP0 = rotor.aep.AEP
 rotor.driver.run_iteration()

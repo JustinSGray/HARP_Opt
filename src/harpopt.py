@@ -13,7 +13,7 @@ try:
     from pyopt_driver.pyopt_driver import pyOptDriver
 except Exception:
     pass
-from openmdao.lib.drivers.api import SLSQPdriver
+from openmdao.lib.drivers.api import SLSQPdriver, CONMINdriver
 from openmdao.lib.casehandlers.api import DumpCaseRecorder
 
 from rotorse.rotoraerodefaults import common_io_with_ccblade, common_configure_with_ccblade
@@ -44,7 +44,7 @@ class HARPOptCCBlade(Assembly):
                                    'Minor feasibility tolerance': 1e-6,
                                    'Major optimality tolerance': 1e-5,
                                    'Function precision': 1e-8,
-                                   'Iterations limit': 500,
+                                   'Iterations limit': 100,
                                    'Print file': 'harpopt_snopt.out',
                                    'Summary file': 'harpopt_snopt_summary.out'}
 
@@ -53,13 +53,18 @@ class HARPOptCCBlade(Assembly):
             self.driver.optimizer = 'PSQP'
             self.driver.options = {'XMAX': 100.0,
                                    'TOLG': 1e-4,
-                                   'MFV': 500,
+                                   'MFV': 100,
                                    'IFILE': 'harpopt_psqp.out'}
 
         elif self.optimizer == 'slsqp':
             self.replace('driver', SLSQPdriver())
             self.driver.accuracy = 1.0e-6
             self.driver.maxiter = 500
+
+        elif self.optimizer == "conmin": 
+            self.replace('driver', CONMINdriver())
+            self.driver.delfun = 1e-6
+            self.driver.itmax = 500
 
         else:
             print 'invalid optimizer specified'
