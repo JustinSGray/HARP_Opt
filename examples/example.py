@@ -119,9 +119,19 @@ rotor.driver.update_parameters()
 rotor.driver.start_iteration()
 
 rotor.driver.run_iteration()
-rotor.AEP0 = rotor.aep.AEP
-rotor.driver.run_iteration()
+# rotor.AEP0 = rotor.aep.AEP
+# rotor.driver.run_iteration()
 
+
+inputs = ['cdf.x']
+outputs = ['cdf.F']
+rotor.cdf.run()
+#rotor.driver.gradient_options.fd_step_type = 'relative'
+#rotor.driver.gradient_options.fd_form = 'central'
+rotor.check_gradient(inputs=inputs, outputs=outputs)
+
+
+exit()
 # run optimization
 rotor.run()
 
